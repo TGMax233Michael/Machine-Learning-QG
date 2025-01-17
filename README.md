@@ -1,2 +1,2 @@
-# AI-Learning-Py-
+# Deep_Learning_QG
 QG
