@@ -1,2 +1,2 @@
-# Deep_Learning_QG
+# Machine_Learning_QG
 QG
