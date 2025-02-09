@@ -1,8 +1,8 @@
 """
-    泰坦尼克号数据集分析
+        泰坦尼克号数据集分析
 
-    发现前面学的还不够多 例如下面用到的pandas的groupby 还有matplotlib的pie和bar 捂脸/
-    算是边学边做的吧
+        发现前面学的还不够多 例如下面用到的pandas的groupby 还有matplotlib的pie和bar 捂脸/
+        算是边学边做的吧
 """
 
 import pandas as pd
