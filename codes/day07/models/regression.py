@@ -17,9 +17,12 @@ class MyLinearRegression:
             print_info (info_density): 输出拟合过程信息. 默认 info_density.no
             polynomial (bool): 开启多项式拟合. 默认 False
             degree (int): 多项式拟合升阶数. 默认 None
-            adagrad (bool): 开启Adagrad梯度算法. 默认 False
-            epsilon (float): Adagrad算法中epsilon参数. 默认 1e-8
+            adagrad (bool): 使用Adagrad梯度算法. 默认 False
+            epsilon (float): Adagrad算法/Adam算法中 epsilon 参数. 默认 1e-8
             mini_batch (bool): 是否开启小批量梯度下降法. 默认 False
+            adam (bool): 使用Adam算法. 默认 False
+            beta1 (float): Adam算法中 beta1 参数
+            beta2 (float): Adam算法中 beta2 参数
         """
     def __init__(self, 
                 iterations=1000, 
