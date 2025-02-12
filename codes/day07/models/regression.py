@@ -7,7 +7,8 @@ class info_density(IntEnum):
     few = auto()
     all = auto()
 
-# TODO 增加梯度裁剪防止梯度爆炸
+
+
 class MyLinearRegression:
     """线性模型
 
@@ -17,12 +18,9 @@ class MyLinearRegression:
             print_info (info_density): 输出拟合过程信息. 默认 info_density.no
             polynomial (bool): 开启多项式拟合. 默认 False
             degree (int): 多项式拟合升阶数. 默认 None
-            adagrad (bool): 使用Adagrad梯度算法. 默认 False
-            epsilon (float): Adagrad算法/Adam算法中 epsilon 参数. 默认 1e-8
+            adagrad (bool): 开启Adagrad梯度算法. 默认 False
+            epsilon (float): Adagrad算法中epsilon参数. 默认 1e-8
             mini_batch (bool): 是否开启小批量梯度下降法. 默认 False
-            adam (bool): 使用Adam算法. 默认 False
-            beta1 (float): Adam算法中 beta1 参数
-            beta2 (float): Adam算法中 beta2 参数
         """
     def __init__(self, 
                 iterations=1000, 
@@ -35,7 +33,7 @@ class MyLinearRegression:
                 mini_batch=False,
                 adam = False,
                 beta1 = 0.9,
-                beta2 = 0.99
+                beta2 = 0.999
                 ):
         self.iterations = iterations
         self.learning_rate = learning_rate
@@ -64,12 +62,10 @@ class MyLinearRegression:
             
         if self.polynomial:
             X = polynomial_features(X, self.degree)
-            
+
+        X = min_max_scaler(X)
         X = np.column_stack((np.ones(X.shape[0]), X))
         
-        # 最大最小归一化
-        # X = min_max_scaler(X, -10, 10)
-            
         n_samples, n_features = X.shape[0], X.shape[1]
         
         if self.adagrad:
@@ -88,7 +84,7 @@ class MyLinearRegression:
         for i in range(self.iterations):
             # 计算梯度
             if self.mini_batch:                 # 使用小批量梯度算法
-                indices = np.random.choice(n_samples, n_samples//10, replace=False)
+                indices = np.random.choice(n_samples, max(n_samples//10, 32), replace=False)
                 X_batch = X[indices]
                 y_batch = y[indices]
                 y_batch_pred = X_batch.dot(weight)
@@ -104,7 +100,7 @@ class MyLinearRegression:
             
             # 计算权重
             if self.adam:
-                # Adam 优先
+                # Adam
                 m = self.beta1 * m + (1 - self.beta1) * gradient
                 v = self.beta2 * v + (1 - self.beta2) * (gradient ** 2)
                 m_hat = m / (1 - self.beta1 ** (i+1))
@@ -115,7 +111,7 @@ class MyLinearRegression:
                 r += gradient ** 2
                 weight -= gradient * (self.learning_rate / (np.sqrt(r) + self.epsilon))
             else:
-                # 普通梯度下降
+                # SGD
                 weight -= gradient * self.learning_rate
 
             y_pred_new = X.dot(weight)
@@ -140,7 +136,8 @@ class MyLinearRegression:
         if self.polynomial:
             X = polynomial_features(X, self.degree)
         
+        X = min_max_scaler(X, 0, 1)
         X = np.column_stack((np.ones(X.shape[0]), X))
-        # X = min_max_scaler(X, 0, 1)
+        
         
         return X.dot(self.weight)
