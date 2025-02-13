@@ -7,20 +7,21 @@ class info_density(IntEnum):
     few = auto()
     all = auto()
 
-
-
 class MyLinearRegression:
-    """线性模型
+    """Linear Model
 
-        属性:
-            iterations (int): 迭代次数. 默认 1000
-            learning_rate (float): 学习率. 默认 0.1
-            print_info (info_density): 输出拟合过程信息. 默认 info_density.no
-            polynomial (bool): 开启多项式拟合. 默认 False
-            degree (int): 多项式拟合升阶数. 默认 None
-            adagrad (bool): 开启Adagrad梯度算法. 默认 False
-            epsilon (float): Adagrad算法中epsilon参数. 默认 1e-8
-            mini_batch (bool): 是否开启小批量梯度下降法. 默认 False
+        Attributes:
+            iterations (int): Number of iterations. Default 1000
+            learning_rate (float): Learning rate. Default 0.1
+            print_info (info_density): Print fitting process information. Default info_density.no
+            polynomial (bool): Enable polynomial fitting. Default False
+            degree (int): Degree of polynomial fitting. Default None
+            adagrad (bool): Enable Adagrad gradient algorithm. Default False
+            epsilon (float): Epsilon parameter in Adagrad algorithm. Default 1e-8
+            mini_batch (bool): Enable mini-batch gradient descent. Default False
+            adam (bool): Enable Adam gradient algorithm. Default False
+            beta1 (float): Beta1 parameter in Adam algorithm. Default 0.9
+            beta2 (float): Beta2 parameter in Adam algorithm. Default 0.999
         """
     def __init__(self, 
                 iterations=1000, 
@@ -51,11 +52,11 @@ class MyLinearRegression:
         
     
     def fit(self, X: np.ndarray, y: np.ndarray):
-        """拟合数据
+        """Fit the data
 
         Args:
-            X (np.ndarray): 特征
-            y (np.ndarray): 标签
+            X (np.ndarray): Features
+            y (np.ndarray): Labels
         """
         if X.ndim == 1:
             X = X.reshape(-1, 1)
@@ -75,30 +76,30 @@ class MyLinearRegression:
             m = np.zeros(shape=(n_features,))
             v = np.zeros(shape=(n_features,))
         
-        # 初始权重
+        # Initial weights
         weight = np.zeros(n_features)
         
         if self.print_info != info_density.no:
-            print(f"初始权重\n{weight}\n")
+            print(f"Initial weights\n{weight}\n")
         
         for i in range(self.iterations):
-            # 计算梯度
-            if self.mini_batch:                 # 使用小批量梯度算法
+            # Calculate gradient
+            if self.mini_batch:                 # Use mini-batch gradient descent
                 indices = np.random.choice(n_samples, max(n_samples//10, 32), replace=False)
                 X_batch = X[indices]
                 y_batch = y[indices]
                 y_batch_pred = X_batch.dot(weight)
                 gradient = 2 / (n_samples//10) * X_batch.T.dot(y_batch_pred - y_batch)
-            else:                               # 使用批量梯度算法
+            else:                               # Use batch gradient descent
                 y_pred = X.dot(weight)
                 gradient = 2 / n_samples * X.T.dot(y_pred - y)
             
-            # 修正梯度爆炸
+            # Gradient clipping
             clip_threshold = 5.0
             if np.linalg.norm(gradient) > clip_threshold:
                 gradient = (clip_threshold / np.linalg.norm(gradient)) * gradient
             
-            # 计算权重
+            # Update weights
             if self.adam:
                 # Adam
                 m = self.beta1 * m + (1 - self.beta1) * gradient
@@ -117,7 +118,7 @@ class MyLinearRegression:
             y_pred_new = X.dot(weight)
             mse = np.mean((y_pred_new - y) ** 2)
 
-            # 输出训练时的信息
+            # Print training information
             if self.print_info == info_density.few:
                 if (i+1) % 10 == 0:
                     print(f"Iteration {i+1}/{self.iterations} MSE {mse}\n Weight {weight}\n\n")
@@ -126,8 +127,6 @@ class MyLinearRegression:
             
         self.weight = weight
         self.mse = mse
-        
-        
         
     def predict(self, X):
         if X.ndim == 1:
@@ -138,6 +137,5 @@ class MyLinearRegression:
         
         X = min_max_scaler(X, 0, 1)
         X = np.column_stack((np.ones(X.shape[0]), X))
-        
         
         return X.dot(self.weight)

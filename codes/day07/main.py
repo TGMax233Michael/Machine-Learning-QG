@@ -25,10 +25,10 @@ def show_result(model, name=None):
     print()
 
 
-# 1. 数据预处理
+# 1. Data Preprocessing
 data = pd.read_csv("BostonHousing.csv")
 
-# rm 存在 5 个缺失值，数量较少采取直接删除样本
+# removed NaN
 data = data.dropna(axis=0, how="any")
 X = data.iloc[:, :-1]
 y = data.iloc[:, -1]
@@ -42,7 +42,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# 2. 学习过程
+# 2. Learning Process
 sklinear_model = LinearRegression()
 my_linear_model = MyLinearRegression(
                             learning_rate=0.01, 
@@ -69,12 +69,12 @@ my_poly_model = MyLinearRegression(
 
 models = {
     "SkLearn LinearRegression" : sklinear_model,
-    "My Linear Regressin" : my_linear_model,
+    "My Linear Regressing" : my_linear_model,
     "Sklearn Pipline(PolynomialFeatures(degree=2), LinearRegression)" : skpoly_model,
     "My Polynomial Regression (degree=2)" : my_poly_model
 }
 
 
-# 3. 模型评估
+# 3. Model Evaluation
 for name, model in models.items():
     show_result(model, name)
