@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-X = np.random.randint(0, 100, size=(50, 2))
+X = np.random.randint(0, 1000, size=(100, 2))
 n_clusters = 2
 n_iterations = 100
 
