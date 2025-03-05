@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from preprocessing import min_max_scaler
+from codes.day07.models.preprocessing import min_max_scaler
 from sklearn.preprocessing import PolynomialFeatures
 
 data = pd.read_csv("BostonHousing.csv")

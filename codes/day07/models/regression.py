@@ -1,5 +1,5 @@
 import numpy as np
-from preprocessing import polynomial_features, min_max_scaler
+from .preprocessing import polynomial_features, min_max_scaler
 from enum import IntEnum, auto
 
 class info_density(IntEnum):
@@ -22,7 +22,7 @@ class MyLinearRegression:
             adam (bool): Enable Adam gradient algorithm. Default False
             beta1 (float): Beta1 parameter in Adam algorithm. Default 0.9
             beta2 (float): Beta2 parameter in Adam algorithm. Default 0.999
-        """
+    """
     def __init__(self, 
                 iterations=1000, 
                 learning_rate=0.1, 
@@ -32,9 +32,9 @@ class MyLinearRegression:
                 adagrad=False,
                 epsilon=1e-8,
                 mini_batch=False,
-                adam = False,
-                beta1 = 0.9,
-                beta2 = 0.999
+                adam=False,
+                beta1=0.9,
+                beta2=0.999
                 ):
         self.iterations = iterations
         self.learning_rate = learning_rate
