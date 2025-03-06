@@ -1,10 +1,19 @@
 import numpy as np
 
-class KMeans:
-    def __init__(self, n_clusters, n_epoches=100, threhold=1e-2):
+class MyKMeans:
+    """
+        KMeans Model
+        
+        Attributes:
+            n_clusters: number of clusters
+            n_epoches: number of iterations
+            tolerance: centroid movement tolerance
+            
+    """
+    def __init__(self, n_clusters, n_epoches=200, tolerance=1e-5):
         self.n_clusters = n_clusters
         self.n_epoches = n_epoches
-        self.threhold = threhold
+        self.tolerance = tolerance
     
     def _init_centroids(self, X: np.ndarray):
         return X[np.random.choice(X.shape[0], self.n_clusters, replace=False)]
@@ -21,7 +30,7 @@ class KMeans:
             labels = np.argmin(distances, axis=1)
             new_centroids = np.array([np.mean(X[i == labels], axis=0) for i in range(self.n_clusters)])
             
-            if np.allclose(new_centroids, centroids, rtol=0, alol=self.threhold):
+            if np.allclose(new_centroids, centroids, rtol=0, atol=self.tolerance):
                 break
             centroids = new_centroids
             
