@@ -8,7 +8,7 @@ data = make_blobs(n_samples=1000, n_features=2, centers=10, random_state=42)
 
 X, y = data[0], data[-1]
 
-model01 = MyKMeans(n_clusters=5, n_epoches=100, threhold=1e-5)
+model01 = MyKMeans(n_clusters=5, n_epoches=100, tolerance=1e-5)
 centroids, labels01 = model01.fit(X)
 
 model02 = KMeans(n_clusters=5)
