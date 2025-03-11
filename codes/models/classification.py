@@ -43,16 +43,10 @@ class BinaryLogisticRegression:
     
     
 class LogisticRegression:
-    """
-        Logistic Regression
-        Attributes:
-            n_epoches: epoches threshold for model training
-            learning_rate: learning rate for model to fit data and update weights
-    """
     def __init__(self, n_epoches=100, learning_rate=0.01):
         self.n_epoches = n_epoches
         self.learning_rate = learning_rate
-        self.classifier: dict[int, BinaryLogisticRegression] = {}
+        self.classifier: dict[any, BinaryLogisticRegression] = {}
         self.classes = None
         
     def fit(self, x: np.ndarray, y: np.ndarray):
